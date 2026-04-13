@@ -1,0 +1,33 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(std::string s) {
+        // Use an array to store the last seen index of each ASCII character
+        // Initializing with -1 indicates the character hasn't been seen
+        std::vector<int> lastPos(128, -1);
+        
+        int maxLength = 0;
+        int left = 0; // Left boundary of the sliding window
+        
+        for (int right = 0; right < s.length(); ++right) {
+            char currentChar = s[right];
+            
+            // If the character was seen before AND its last position 
+            // is within our current window, move the left boundary
+            if (lastPos[currentChar] >= left) {
+                left = lastPos[currentChar] + 1;
+            }
+            
+            // Update the character's last seen position to the current index
+            lastPos[currentChar] = right;
+            
+            // Calculate window size (right - left + 1) and update maximum
+            maxLength = std::max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+};
